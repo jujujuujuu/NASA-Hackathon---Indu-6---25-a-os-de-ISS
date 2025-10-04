@@ -1,0 +1,26 @@
+[gd_scene load_steps=7 format=3 uid="uid://b5ictro75vtl0"]
+
+[ext_resource type="Script" uid="uid://bv7xv0et2lcme" path="res://scripts/world.gd" id="1_rwgxs"]
+[ext_resource type="Texture2D" uid="uid://b3v88tbjb4t4f" path="res://textures/earth.png" id="2_4wyf3"]
+[ext_resource type="PackedScene" uid="uid://dpn64rrxkr6pg" path="res://scenes/iss.tscn" id="3_4wyf3"]
+
+[sub_resource type="Environment" id="Environment_k0juu"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_71j4m"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qfnet"]
+albedo_texture = ExtResource("2_4wyf3")
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_rwgxs")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_k0juu")
+
+[node name="Earth" type="MeshInstance3D" parent="."]
+transform = Transform3D(1000, 0, 0, 0, 1000, 0, 0, 0, 1000, -500, 0, 0)
+mesh = SubResource("SphereMesh_71j4m")
+surface_material_override/0 = SubResource("StandardMaterial3D_qfnet")
+
+[node name="ISS" parent="." instance=ExtResource("3_4wyf3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.544, 0, 0)

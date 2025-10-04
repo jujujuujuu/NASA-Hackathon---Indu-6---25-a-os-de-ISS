@@ -1,14 +1,14 @@
 extends Node3D
 
-var height = 380
-#var scale_factor = 0.5
-var earth_size = 6371
+var iss_height = 380
+var earth_radius = 6371
+var earth_rot_speed = 0.465
 
 func _init() -> void:
-	$Earth.scale = Vector3(earth_size)
-	
-	
+	pass
 
 func _process(delta: float) -> void:
-	$Earth.rotate_y(0 * delta)
+	var angular_speed = earth_rot_speed/earth_radius
+	
+	$Earth.rotate_y(angular_speed * delta)
 	

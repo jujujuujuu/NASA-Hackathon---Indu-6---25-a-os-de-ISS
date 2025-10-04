@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dpn64rrxkr6pg" path="res://scenes/iss.tscn" id="3_4wyf3"]
 
 [sub_resource type="Environment" id="Environment_k0juu"]
+background_mode = 1
 
 [sub_resource type="SphereMesh" id="SphereMesh_71j4m"]
 
@@ -18,9 +19,13 @@ script = ExtResource("1_rwgxs")
 environment = SubResource("Environment_k0juu")
 
 [node name="Earth" type="MeshInstance3D" parent="."]
-transform = Transform3D(1000, 0, 0, 0, 1000, 0, 0, 0, 1000, -500, 0, 0)
+transform = Transform3D(1000, 0, 0, 0, 1000, 0, 0, 0, 1000, 0, 0, 0)
 mesh = SubResource("SphereMesh_71j4m")
 surface_material_override/0 = SubResource("StandardMaterial3D_qfnet")
 
 [node name="ISS" parent="." instance=ExtResource("3_4wyf3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.544, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 523.544, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 530, 0, 0)
+current = true

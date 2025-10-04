@@ -23,7 +23,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed("translate_down"):
 		pos_change += Vector3(0, -1, 0)
 		
-	translate_object_local(pos_change.normalized()*delta*2)
+	translate_object_local(pos_change.normalized()*delta*80)
 	
 
 func _unhandled_input(event: InputEvent) -> void:

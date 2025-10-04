@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b5ictro75vtl0"]
+[gd_scene load_steps=22 format=3 uid="uid://b5ictro75vtl0"]
 
 [ext_resource type="Script" uid="uid://bv7xv0et2lcme" path="res://scripts/world.gd" id="1_rwgxs"]
 [ext_resource type="Texture2D" uid="uid://do7x2luy042gc" path="res://textures/skybox.jpg" id="2_i7141"]
@@ -9,6 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://x4smwjxpocc8" path="res://textures/earth-normalmap.jpg" id="4_w7kh3"]
 [ext_resource type="Script" uid="uid://bhaks82anmquh" path="res://scenes/player.gd" id="5_71j4m"]
 [ext_resource type="Texture2D" uid="uid://dn25kpmav7bxi" path="res://textures/8081_earthspec2k.jpg" id="5_e3hyu"]
+[ext_resource type="Texture2D" uid="uid://bxmef0glv2cug" path="res://textures/image.png" id="6_jhx03"]
+[ext_resource type="PackedScene" uid="uid://c36velgas3n3k" path="res://addons/zylann.atmosphere/planet_atmosphere.tscn" id="6_q5onr"]
+[ext_resource type="Texture2D" uid="uid://b35bc3copmn1l" path="res://textures/moon.jpg" id="11_jhx03"]
+[ext_resource type="Texture2D" uid="uid://7uc3pxqh0ssb" path="res://textures/moon_normal.jpg" id="12_o8fc1"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_4mrxx"]
 panorama = ExtResource("2_i7141")
@@ -25,12 +29,27 @@ ambient_light_color = Color(0.62967473, 0.62967485, 0.62967455, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_q5onr"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jhx03"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o8fc1"]
 albedo_texture = ExtResource("3_7r4gi")
 roughness_texture = ExtResource("5_e3hyu")
 normal_enabled = true
 normal_scale = 0.2
 normal_texture = ExtResource("4_w7kh3")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jhx03"]
+transparency = 1
+blend_mode = 1
+albedo_texture = ExtResource("6_jhx03")
+normal_scale = 0.2
+normal_texture = ExtResource("4_w7kh3")
+
+[sub_resource type="SphereMesh" id="SphereMesh_xo05s"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dss4m"]
+albedo_texture = ExtResource("11_jhx03")
+normal_enabled = true
+normal_scale = 0.6
+normal_texture = ExtResource("12_o8fc1")
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_rwgxs")
@@ -41,7 +60,20 @@ environment = SubResource("Environment_k0juu")
 [node name="Earth" type="MeshInstance3D" parent="."]
 transform = Transform3D(917.06006, -398.74908, 0, 398.74908, 917.06006, 0, 0, 0, 1000, 0, 0, 0)
 mesh = SubResource("SphereMesh_q5onr")
+surface_material_override/0 = SubResource("StandardMaterial3D_o8fc1")
+
+[node name="Clouds" type="MeshInstance3D" parent="Earth"]
+transform = Transform3D(1.01, 0, 0, 0, 1.01, 0, 0, 0, 1.01, 0, 0, 0)
+mesh = SubResource("SphereMesh_q5onr")
+skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_jhx03")
+
+[node name="PlanetAthmosphere" parent="Earth" instance=ExtResource("6_q5onr")]
+planet_radius = 500.0
+atmosphere_height = 40.0
+sun_path = NodePath("../../Sun")
+shader_params/u_density = 0.1
+shader_params/u_atmosphere_ambient_color = Color(0, 0, 0.002, 1)
 
 [node name="ISS" parent="." instance=ExtResource("3_4wyf3")]
 transform = Transform3D(1, 0, 0, 0, 0.99999934, 0, 7.105422e-15, 0, 0.9999991, 0, 0, 0)
@@ -50,5 +82,10 @@ script = ExtResource("4_qfnet")
 [node name="Player" parent="ISS" instance=ExtResource("4_k0juu")]
 script = ExtResource("5_71j4m")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.00013503965, 0, -1544.6736)
+
+[node name="Moon" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -550)
+mesh = SubResource("SphereMesh_xo05s")
+surface_material_override/0 = SubResource("StandardMaterial3D_dss4m")

@@ -1,21 +1,38 @@
-[gd_scene load_steps=10 format=3 uid="uid://b5ictro75vtl0"]
+[gd_scene load_steps=16 format=3 uid="uid://b5ictro75vtl0"]
 
 [ext_resource type="Script" uid="uid://bv7xv0et2lcme" path="res://scripts/world.gd" id="1_rwgxs"]
-[ext_resource type="Texture2D" uid="uid://b3v88tbjb4t4f" path="res://textures/earth.png" id="2_4wyf3"]
+[ext_resource type="Texture2D" uid="uid://do7x2luy042gc" path="res://textures/skybox.jpg" id="2_i7141"]
 [ext_resource type="PackedScene" uid="uid://dpn64rrxkr6pg" path="res://scenes/iss.tscn" id="3_4wyf3"]
+[ext_resource type="Texture2D" uid="uid://cqsjejrg7ye1o" path="res://textures/8081_earthmap10k.jpg" id="3_w7kh3"]
+[ext_resource type="Texture2D" uid="uid://cgntng8f6uxd5" path="res://textures/earthbump1k.jpg" id="4_e3hyu"]
 [ext_resource type="PackedScene" uid="uid://bvfrpbarl8smf" path="res://scenes/player.tscn" id="4_k0juu"]
 [ext_resource type="Script" uid="uid://dk1rlhbl6g7os" path="res://scenes/station.gd" id="4_qfnet"]
 [ext_resource type="Script" uid="uid://bhaks82anmquh" path="res://scenes/player.gd" id="5_71j4m"]
+[ext_resource type="Texture2D" uid="uid://x4smwjxpocc8" path="res://textures/earth-normalmap.jpg" id="5_q5onr"]
+[ext_resource type="Texture2D" uid="uid://dn25kpmav7bxi" path="res://textures/8081_earthspec2k.jpg" id="6_jhx03"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_4mrxx"]
+panorama = ExtResource("2_i7141")
+
+[sub_resource type="Sky" id="Sky_7r4gi"]
+sky_material = SubResource("PanoramaSkyMaterial_4mrxx")
 
 [sub_resource type="Environment" id="Environment_k0juu"]
-background_mode = 1
-ambient_light_source = 2
+background_mode = 2
+background_energy_multiplier = 0.5
+sky = SubResource("Sky_7r4gi")
+ambient_light_source = 3
 ambient_light_color = Color(0.62967473, 0.62967485, 0.62967455, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_71j4m"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qfnet"]
-albedo_texture = ExtResource("2_4wyf3")
+albedo_texture = ExtResource("3_w7kh3")
+roughness_texture = ExtResource("6_jhx03")
+normal_enabled = true
+normal_scale = 0.2
+normal_texture = ExtResource("5_q5onr")
+heightmap_texture = ExtResource("4_e3hyu")
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_rwgxs")
@@ -24,7 +41,7 @@ script = ExtResource("1_rwgxs")
 environment = SubResource("Environment_k0juu")
 
 [node name="Earth" type="MeshInstance3D" parent="."]
-transform = Transform3D(1000, 0, 0, 0, 1000, 0, 0, 0, 1000, 0, 0, 0)
+transform = Transform3D(917.05994, -398.74902, 0, 398.74902, 917.05994, 0, 0, 0, 999.9999, 0, 0, 0)
 mesh = SubResource("SphereMesh_71j4m")
 surface_material_override/0 = SubResource("StandardMaterial3D_qfnet")
 
@@ -34,3 +51,6 @@ script = ExtResource("4_qfnet")
 
 [node name="Player" parent="ISS" instance=ExtResource("4_k0juu")]
 script = ExtResource("5_71j4m")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)

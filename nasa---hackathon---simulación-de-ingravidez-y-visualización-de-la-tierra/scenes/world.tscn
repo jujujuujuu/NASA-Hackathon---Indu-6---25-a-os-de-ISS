@@ -29,9 +29,8 @@ mesh = SubResource("SphereMesh_71j4m")
 surface_material_override/0 = SubResource("StandardMaterial3D_qfnet")
 
 [node name="ISS" parent="." instance=ExtResource("3_4wyf3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 523.544, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.99999934, 0, 7.105422e-15, 0, 0.9999991, 0, 0, 0)
 script = ExtResource("4_qfnet")
 
 [node name="Player" parent="ISS" instance=ExtResource("4_k0juu")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6.4559937, 0, 0)
 script = ExtResource("5_71j4m")

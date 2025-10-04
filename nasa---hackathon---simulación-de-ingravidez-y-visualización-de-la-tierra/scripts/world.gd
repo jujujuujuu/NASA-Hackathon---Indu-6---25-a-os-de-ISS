@@ -1,11 +1,19 @@
 extends Node3D
 
-var iss_height = 380
-var earth_radius = 6371
 var earth_rot_speed = 5
+var tween
+
+func _ready():
+	while true:
+		$Earth.rotation.y = 0
+		
+		tween = create_tween()
+		tween.set_trans(Tween.TRANS_LINEAR)
+		
+		tween.tween_property($Earth, "rotation:y", deg_to_rad(359), 10)
+		await get_tree().create_timer(10).timeout
 
 func _process(delta: float) -> void:
-	var angular_speed = earth_rot_speed/earth_radius
-	
-	$Earth.rotate_y(angular_speed * delta)
-	
+	#var angular_speed = earth_rot_speed/Global.earth_radius
+	#$Earth.rotate_y(angular_speed * delta)
+	pass

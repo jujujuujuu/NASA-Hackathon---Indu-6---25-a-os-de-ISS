@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://b3wk5dxbxquth"]
+[gd_scene load_steps=15 format=4 uid="uid://b3wk5dxbxquth"]
 
 [ext_resource type="Texture2D" uid="uid://0ii8jmkpko7n" path="res://textures/astronaut_helmet_0.jpg" id="1_ice3k"]
 [ext_resource type="Texture2D" uid="uid://dohybmiisswdm" path="res://textures/astronaut_helmet_1.png" id="2_1ncnl"]
@@ -91,6 +91,11 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_yj8jl")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_07hng"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.14509805)
+roughness = 0.11
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lj02u"]
 resource_name = "Standard_14"
 cull_mode = 2
@@ -138,12 +143,17 @@ transform = Transform3D(1, 0, 0, 0, 1, -2.220446e-16, 0, 2.220446e-16, 1, 0, 0, 
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.17651844, 20.788845, 0.060147423)
 
 [node name="Helmet-Body_Helmet-Body_0" type="MeshInstance3D" parent="Helmet-Body"]
+layers = 2
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_jd2bu")
 skeleton = NodePath("")
 
 [node name="Helmet-Body_helmet_glass_0" type="MeshInstance3D" parent="Helmet-Body"]
+layers = 2
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_6b55s")
 skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_07hng")
 
 [node name="Black-one" type="Node3D" parent="Helmet-Body"]
 transform = Transform3D(1, 0, 0, 0, -0.24668193, 0.9690965, 0, -0.9690965, -0.24668193, -1.335144e-05, -3.4208524, -1.9167786)
@@ -152,5 +162,7 @@ transform = Transform3D(1, 0, 0, 0, -0.24668193, 0.9690965, 0, -0.9690965, -0.24
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18512574, -0.14922221)
 
 [node name="Black-one_Standard_14_0" type="MeshInstance3D" parent="Helmet-Body/Black-one/Object_8"]
+layers = 2
+cast_shadow = 0
 mesh = SubResource("ArrayMesh_tmfk7")
 skeleton = NodePath("")

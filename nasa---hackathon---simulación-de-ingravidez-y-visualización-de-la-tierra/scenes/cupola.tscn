@@ -311,5 +311,6 @@ shadow_mesh = SubResource("ArrayMesh_sjxrh")
 
 [node name="cupola_open" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+layers = 2
 mesh = SubResource("ArrayMesh_bvduy")
 skeleton = NodePath("")

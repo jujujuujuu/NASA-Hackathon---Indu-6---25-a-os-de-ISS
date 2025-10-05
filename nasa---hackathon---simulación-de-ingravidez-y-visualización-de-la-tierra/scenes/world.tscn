@@ -1,9 +1,10 @@
-[gd_scene load_steps=21 format=3 uid="uid://b5ictro75vtl0"]
+[gd_scene load_steps=24 format=3 uid="uid://b5ictro75vtl0"]
 
 [ext_resource type="Script" uid="uid://bv7xv0et2lcme" path="res://scripts/world.gd" id="1_rwgxs"]
 [ext_resource type="Texture2D" uid="uid://do7x2luy042gc" path="res://textures/skybox.jpg" id="2_i7141"]
 [ext_resource type="PackedScene" uid="uid://dpn64rrxkr6pg" path="res://scenes/iss.tscn" id="3_4wyf3"]
 [ext_resource type="Texture2D" uid="uid://cqsjejrg7ye1o" path="res://textures/8081_earthmap10k.jpg" id="3_7r4gi"]
+[ext_resource type="SphereMesh" uid="uid://ch0eyu4mpvaqh" path="res://scenes/clouds.tres" id="3_7t5mc"]
 [ext_resource type="PackedScene" uid="uid://bvfrpbarl8smf" path="res://scenes/player.tscn" id="4_k0juu"]
 [ext_resource type="Script" uid="uid://dk1rlhbl6g7os" path="res://scripts/station.gd" id="4_qfnet"]
 [ext_resource type="Texture2D" uid="uid://x4smwjxpocc8" path="res://textures/earth-normalmap.jpg" id="4_w7kh3"]
@@ -13,7 +14,9 @@
 [ext_resource type="PackedScene" uid="uid://c36velgas3n3k" path="res://addons/zylann.atmosphere/planet_atmosphere.tscn" id="6_q5onr"]
 [ext_resource type="PackedScene" uid="uid://1rvx5q84njar" path="res://scenes/cupola.tscn" id="12_xo05s"]
 [ext_resource type="PackedScene" uid="uid://d07b0bq51nc00" path="res://scenes/station_model.tscn" id="13_o8fc1"]
-[ext_resource type="Texture2D" uid="uid://jgl0jbyjhhkl" path="res://textures/sun.png" id="14_xo05s"]
+[ext_resource type="Texture2D" uid="uid://dhviq4fkjhd2i" path="res://textures/sun.png" id="14_xo05s"]
+[ext_resource type="Script" uid="uid://6ijkhfja36p6" path="res://scripts/sub_viewport.gd" id="15_xo05s"]
+[ext_resource type="PackedScene" uid="uid://b3wk5dxbxquth" path="res://scenes/helmet.tscn" id="16_dss4m"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_dss4m"]
 panorama = ExtResource("2_i7141")
@@ -30,23 +33,24 @@ ambient_light_source = 3
 ambient_light_color = Color(0.62967473, 0.62967485, 0.62967455, 1)
 reflected_light_source = 2
 
-[sub_resource type="SphereMesh" id="SphereMesh_q5onr"]
-radial_segments = 128
-rings = 64
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o8fc1"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lakw3"]
 albedo_texture = ExtResource("3_7r4gi")
 roughness_texture = ExtResource("5_e3hyu")
 normal_enabled = true
 normal_scale = 0.2
 normal_texture = ExtResource("4_w7kh3")
+disable_receive_shadows = true
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jhx03"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pm21f"]
 transparency = 1
 blend_mode = 1
 albedo_texture = ExtResource("6_jhx03")
 normal_scale = 0.2
 normal_texture = ExtResource("4_w7kh3")
+disable_receive_shadows = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xo05s"]
+bg_color = Color(0, 0, 0, 0)
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_rwgxs")
@@ -54,18 +58,22 @@ script = ExtResource("1_rwgxs")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_k0juu")
 
-[node name="Earth" type="MeshInstance3D" parent="."]
-transform = Transform3D(917.06006, -398.74908, 0, 398.74908, 917.06006, 0, 0, 0, 1000, -0.045463562, 0.08403778, -0.040603638)
-mesh = SubResource("SphereMesh_q5onr")
-surface_material_override/0 = SubResource("StandardMaterial3D_o8fc1")
+[node name="Earth" type="Node3D" parent="."]
+
+[node name="Mesh" type="MeshInstance3D" parent="Earth"]
+transform = Transform3D(917.06006, -398.74908, 0, 398.74908, 917.06006, 0, 0, 0, 1000, -0.046308517, 0.14136195, -0.065164566)
+mesh = ExtResource("3_7t5mc")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_lakw3")
 
 [node name="Clouds" type="MeshInstance3D" parent="Earth"]
-transform = Transform3D(1.01, 0, 0, 0, 1.01, 0, 0, 0, 1.01, 0, 0, 0)
-mesh = SubResource("SphereMesh_q5onr")
+transform = Transform3D(926.23065, -402.73657, 0, 402.73657, 926.23065, 0, 0, 0, 1010, -0.046308517, 0.14136195, -0.065164566)
+mesh = ExtResource("3_7t5mc")
 skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_jhx03")
+surface_material_override/0 = SubResource("StandardMaterial3D_pm21f")
 
 [node name="PlanetAthmosphere" parent="Earth" instance=ExtResource("6_q5onr")]
+transform = Transform3D(917.06006, -398.74908, 0, 398.74908, 917.06006, 0, 0, 0, 1000, -0.046308517, 0.14136195, -0.065164566)
 planet_radius = 500.0
 atmosphere_height = 40.0
 sun_path = NodePath("../../Sun")
@@ -73,23 +81,108 @@ shader_params/u_density = 0.1
 shader_params/u_atmosphere_ambient_color = Color(0, 0, 0.002, 1)
 
 [node name="ISS" parent="." instance=ExtResource("3_4wyf3")]
-transform = Transform3D(1, 0, 0, 0, 0.99999934, 0, 7.105422e-15, 0, 0.9999991, 0, 0, 0)
+transform = Transform3D(-4.371139e-08, 0, -0.9999991, 0, 0.99999934, 0, 1, 0, -4.371135e-08, 0, 0, 0)
 script = ExtResource("4_qfnet")
 
-[node name="Player" parent="ISS" instance=ExtResource("4_k0juu")]
+[node name="Player" parent="ISS" node_paths=PackedStringArray("viewport_cam", "UI") instance=ExtResource("4_k0juu")]
 script = ExtResource("5_71j4m")
+viewport_cam = NodePath("../../StationViewport/SubViewport/Camera3D")
+UI = NodePath("../../UI")
+
+[node name="Camera3D" type="Camera3D" parent="ISS/Player"]
+cull_mask = 1048573
 
 [node name="cupola" parent="ISS" instance=ExtResource("12_xo05s")]
 transform = Transform3D(1, 0, 0, 0, 1.0000006, 0, -7.105428e-15, 0, 1.0000008, 0, 0, 0)
 
 [node name="station" parent="ISS" instance=ExtResource("13_o8fc1")]
-transform = Transform3D(3.821371e-15, 8.742278e-08, 2, 2, -8.742278e-08, 0, 8.742278e-08, 2, -8.742278e-08, -0.06639505, -3.4265785, -21.880209)
+transform = Transform3D(4.7767136e-15, -1.09278474e-07, -2.5, -2.5, -1.09278474e-07, 0, -1.09278474e-07, 2.5, -1.09278474e-07, -0.06639193, 8.343274, -25.284477)
 visible = false
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.00013503965, 0, -1544.6736)
+layers = 3
 shadow_enabled = true
 
-[node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -868.4368)
+[node name="Sprite" type="Sprite3D" parent="Sun"]
+transform = Transform3D(-80, 0, 1.2079664e-05, 0, 80, 0, -1.2079664e-05, 0, -80, -0.000378301, 0, 2782.5852)
+gi_mode = 0
+billboard = 1
+double_sided = false
 texture = ExtResource("14_xo05s")
+
+[node name="StationViewport" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="StationViewport"]
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 4
+script = ExtResource("15_xo05s")
+
+[node name="Camera3D" type="Camera3D" parent="StationViewport/SubViewport"]
+cull_mask = 1048574
+
+[node name="Flashlight" type="SpotLight3D" parent="StationViewport/SubViewport/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 0.9559827, 0.29342303, 0, -0.29342303, 0.9559827, 0.3158096, 0.15261143, -0.20820509)
+visible = false
+layers = 2
+light_energy = 0.8
+spot_range = 8.0
+spot_angle = 60.0
+
+[node name="Helmet" parent="StationViewport/SubViewport/Camera3D" instance=ExtResource("16_dss4m")]
+transform = Transform3D(-0.02, 0, -3.0199159e-09, 0, 0.02, 0, 3.0199159e-09, 0, -0.02, 0, -0.3751162, -0.056589514)
+visible = false
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="Panel" parent="UI"]
+visibility_layer = 3
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xo05s")
+
+[node name="Interact" type="Label" parent="UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.01
+anchor_top = 0.9
+anchor_right = 0.3
+anchor_bottom = 0.99
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "[T] - Exit Cupola"
+vertical_alignment = 2
+
+[node name="Controls" type="Label" parent="UI"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.01
+anchor_top = 0.89
+anchor_right = 0.3
+anchor_bottom = 0.905
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "[F] - Flashlight
+[R] - Stop Movement"
+vertical_alignment = 2

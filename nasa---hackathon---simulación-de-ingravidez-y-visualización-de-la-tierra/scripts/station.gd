@@ -1,12 +1,13 @@
 extends Node3D
 
 var tween
+var orbit_offset = 5
 
 func _ready():
-	position = Global.orbit_data[0][0]
+	position = Global.orbit_data[orbit_offset][0]
 		
 	for i in Global.orbit_data.size():
-		if i==0:
+		if i <= orbit_offset:
 			continue
 			
 		tween = create_tween()

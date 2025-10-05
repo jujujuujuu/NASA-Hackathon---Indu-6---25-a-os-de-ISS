@@ -1,0 +1,118 @@
+[gd_scene load_steps=22 format=3 uid="uid://b5ictro75vtl0"]
+
+[ext_resource type="Script" uid="uid://bv7xv0et2lcme" path="res://scripts/world.gd" id="1_rwgxs"]
+[ext_resource type="Texture2D" uid="uid://do7x2luy042gc" path="res://textures/skybox.jpg" id="2_i7141"]
+[ext_resource type="PackedScene" uid="uid://dpn64rrxkr6pg" path="res://scenes/iss.tscn" id="3_4wyf3"]
+[ext_resource type="Texture2D" uid="uid://cqsjejrg7ye1o" path="res://textures/8081_earthmap10k.jpg" id="3_7r4gi"]
+[ext_resource type="PackedScene" uid="uid://bvfrpbarl8smf" path="res://scenes/player.tscn" id="4_k0juu"]
+[ext_resource type="Script" uid="uid://dk1rlhbl6g7os" path="res://scripts/station.gd" id="4_qfnet"]
+[ext_resource type="Texture2D" uid="uid://x4smwjxpocc8" path="res://textures/earth-normalmap.jpg" id="4_w7kh3"]
+[ext_resource type="Script" uid="uid://bhaks82anmquh" path="res://scripts/player.gd" id="5_71j4m"]
+[ext_resource type="Texture2D" uid="uid://dn25kpmav7bxi" path="res://textures/8081_earthspec2k.jpg" id="5_e3hyu"]
+[ext_resource type="Texture2D" uid="uid://d3aasnj3abjqa" path="res://textures/clouds.jpg" id="6_jhx03"]
+[ext_resource type="PackedScene" uid="uid://c36velgas3n3k" path="res://addons/zylann.atmosphere/planet_atmosphere.tscn" id="6_q5onr"]
+[ext_resource type="PackedScene" uid="uid://1rvx5q84njar" path="res://scenes/cupola.tscn" id="12_xo05s"]
+[ext_resource type="PackedScene" uid="uid://d07b0bq51nc00" path="res://scenes/station_model.tscn" id="13_o8fc1"]
+[ext_resource type="Texture2D" uid="uid://jgl0jbyjhhkl" path="res://textures/sun.png" id="14_xo05s"]
+[ext_resource type="Script" uid="uid://6ijkhfja36p6" path="res://scripts/sub_viewport.gd" id="15_xo05s"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_dss4m"]
+panorama = ExtResource("2_i7141")
+
+[sub_resource type="Sky" id="Sky_7r4gi"]
+sky_material = SubResource("PanoramaSkyMaterial_dss4m")
+process_mode = 1
+
+[sub_resource type="Environment" id="Environment_k0juu"]
+background_mode = 2
+background_energy_multiplier = 0.5
+sky = SubResource("Sky_7r4gi")
+ambient_light_source = 3
+ambient_light_color = Color(0.62967473, 0.62967485, 0.62967455, 1)
+reflected_light_source = 2
+
+[sub_resource type="SphereMesh" id="SphereMesh_q5onr"]
+radial_segments = 128
+rings = 64
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o8fc1"]
+albedo_texture = ExtResource("3_7r4gi")
+roughness_texture = ExtResource("5_e3hyu")
+normal_enabled = true
+normal_scale = 0.2
+normal_texture = ExtResource("4_w7kh3")
+disable_receive_shadows = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jhx03"]
+transparency = 1
+blend_mode = 1
+albedo_texture = ExtResource("6_jhx03")
+normal_scale = 0.2
+normal_texture = ExtResource("4_w7kh3")
+disable_receive_shadows = true
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_rwgxs")
+
+[node name="StationViewport" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="StationViewport"]
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 4
+script = ExtResource("15_xo05s")
+
+[node name="Camera3D" type="Camera3D" parent="StationViewport/SubViewport"]
+cull_mask = 1048574
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_k0juu")
+
+[node name="Earth" type="MeshInstance3D" parent="."]
+transform = Transform3D(917.06006, -398.74908, 0, 398.74908, 917.06006, 0, 0, 0, 1000, -0.046308517, 0.14136195, -0.065164566)
+mesh = SubResource("SphereMesh_q5onr")
+surface_material_override/0 = SubResource("StandardMaterial3D_o8fc1")
+
+[node name="Clouds" type="MeshInstance3D" parent="Earth"]
+transform = Transform3D(1.01, 0, 0, 0, 1.01, 0, 0, 0, 1.01, 0, 0, 0)
+mesh = SubResource("SphereMesh_q5onr")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_jhx03")
+
+[node name="PlanetAthmosphere" parent="Earth" instance=ExtResource("6_q5onr")]
+planet_radius = 500.0
+atmosphere_height = 40.0
+sun_path = NodePath("../../Sun")
+shader_params/u_density = 0.1
+shader_params/u_atmosphere_ambient_color = Color(0, 0, 0.002, 1)
+
+[node name="ISS" parent="." instance=ExtResource("3_4wyf3")]
+transform = Transform3D(1, 0, 0, 0, 0.99999934, 0, 7.105422e-15, 0, 0.9999991, 0, 0, 0)
+script = ExtResource("4_qfnet")
+
+[node name="Player" parent="ISS" node_paths=PackedStringArray("viewport_cam") instance=ExtResource("4_k0juu")]
+script = ExtResource("5_71j4m")
+viewport_cam = NodePath("../../StationViewport/SubViewport/Camera3D")
+
+[node name="Camera3D" type="Camera3D" parent="ISS/Player"]
+cull_mask = 1048573
+
+[node name="cupola" parent="ISS" instance=ExtResource("12_xo05s")]
+transform = Transform3D(1, 0, 0, 0, 1.0000006, 0, -7.105428e-15, 0, 1.0000008, 0, 0, 0)
+
+[node name="station" parent="ISS" instance=ExtResource("13_o8fc1")]
+transform = Transform3D(4.7767136e-15, 1.09278474e-07, 2.5, 2.5, -1.09278474e-07, 0, 1.09278474e-07, 2.5, -1.09278474e-07, -0.06639518, -7.961404, -24.660036)
+visible = false
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.00013503965, 0, -1544.6736)
+shadow_enabled = true
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -868.4368)
+texture = ExtResource("14_xo05s")

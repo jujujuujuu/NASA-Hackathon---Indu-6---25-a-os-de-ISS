@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://b5ictro75vtl0"]
+[gd_scene load_steps=21 format=3 uid="uid://b5ictro75vtl0"]
 
 [ext_resource type="Script" uid="uid://bv7xv0et2lcme" path="res://scripts/world.gd" id="1_rwgxs"]
 [ext_resource type="Texture2D" uid="uid://do7x2luy042gc" path="res://textures/skybox.jpg" id="2_i7141"]
@@ -11,16 +11,16 @@
 [ext_resource type="Texture2D" uid="uid://dn25kpmav7bxi" path="res://textures/8081_earthspec2k.jpg" id="5_e3hyu"]
 [ext_resource type="Texture2D" uid="uid://d3aasnj3abjqa" path="res://textures/clouds.jpg" id="6_jhx03"]
 [ext_resource type="PackedScene" uid="uid://c36velgas3n3k" path="res://addons/zylann.atmosphere/planet_atmosphere.tscn" id="6_q5onr"]
-[ext_resource type="Texture2D" uid="uid://b35bc3copmn1l" path="res://textures/moon.jpg" id="11_jhx03"]
-[ext_resource type="Texture2D" uid="uid://7uc3pxqh0ssb" path="res://textures/moon_normal.jpg" id="12_o8fc1"]
 [ext_resource type="PackedScene" uid="uid://1rvx5q84njar" path="res://scenes/cupola.tscn" id="12_xo05s"]
-[ext_resource type="PackedScene" uid="uid://dlqi352hsia4v" path="res://astronaut_helmet.glb" id="15_xo05s"]
+[ext_resource type="PackedScene" uid="uid://d07b0bq51nc00" path="res://scenes/station_model.tscn" id="13_o8fc1"]
+[ext_resource type="Texture2D" uid="uid://jgl0jbyjhhkl" path="res://textures/sun.png" id="14_xo05s"]
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_4mrxx"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_dss4m"]
 panorama = ExtResource("2_i7141")
 
 [sub_resource type="Sky" id="Sky_7r4gi"]
-sky_material = SubResource("PanoramaSkyMaterial_4mrxx")
+sky_material = SubResource("PanoramaSkyMaterial_dss4m")
+process_mode = 1
 
 [sub_resource type="Environment" id="Environment_k0juu"]
 background_mode = 2
@@ -28,6 +28,7 @@ background_energy_multiplier = 0.5
 sky = SubResource("Sky_7r4gi")
 ambient_light_source = 3
 ambient_light_color = Color(0.62967473, 0.62967485, 0.62967455, 1)
+reflected_light_source = 2
 
 [sub_resource type="SphereMesh" id="SphereMesh_q5onr"]
 radial_segments = 128
@@ -47,14 +48,6 @@ albedo_texture = ExtResource("6_jhx03")
 normal_scale = 0.2
 normal_texture = ExtResource("4_w7kh3")
 
-[sub_resource type="SphereMesh" id="SphereMesh_xo05s"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dss4m"]
-albedo_texture = ExtResource("11_jhx03")
-normal_enabled = true
-normal_scale = 0.6
-normal_texture = ExtResource("12_o8fc1")
-
 [node name="World" type="Node3D"]
 script = ExtResource("1_rwgxs")
 
@@ -62,7 +55,7 @@ script = ExtResource("1_rwgxs")
 environment = SubResource("Environment_k0juu")
 
 [node name="Earth" type="MeshInstance3D" parent="."]
-transform = Transform3D(917.06006, -398.74908, 0, 398.74908, 917.06006, 0, 0, 0, 1000, 0, 0, 0)
+transform = Transform3D(917.06006, -398.74908, 0, 398.74908, 917.06006, 0, 0, 0, 1000, -0.045463562, 0.08403778, -0.040603638)
 mesh = SubResource("SphereMesh_q5onr")
 surface_material_override/0 = SubResource("StandardMaterial3D_o8fc1")
 
@@ -89,13 +82,14 @@ script = ExtResource("5_71j4m")
 [node name="cupola" parent="ISS" instance=ExtResource("12_xo05s")]
 transform = Transform3D(1, 0, 0, 0, 1.0000006, 0, -7.105428e-15, 0, 1.0000008, 0, 0, 0)
 
+[node name="station" parent="ISS" instance=ExtResource("13_o8fc1")]
+transform = Transform3D(3.821371e-15, 8.742278e-08, 2, 2, -8.742278e-08, 0, 8.742278e-08, 2, -8.742278e-08, -0.06639505, -3.4265785, -21.880209)
+visible = false
+
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.00013503965, 0, -1544.6736)
+shadow_enabled = true
 
-[node name="Moon" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -550)
-mesh = SubResource("SphereMesh_xo05s")
-surface_material_override/0 = SubResource("StandardMaterial3D_dss4m")
-
-[node name="Sketchfab_Scene" parent="." instance=ExtResource("15_xo05s")]
-transform = Transform3D(-0.99645627, 0, 0.08411272, 0, 1, 0, -0.08411272, 0, -0.99645627, 125.82726, 147.01605, -538.9496)
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -868.4368)
+texture = ExtResource("14_xo05s")

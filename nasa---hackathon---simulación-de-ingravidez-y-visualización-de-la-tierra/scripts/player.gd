@@ -4,7 +4,7 @@ const mouse_sensitivity = 0.002
 var rotation_y = 0
 var rotation_x = 0
 var velocity = Vector3.ZERO
-var max_velocity = 6
+var max_velocity = 4
 var in_cupola = true
 
 func _ready():
@@ -15,7 +15,7 @@ func set_velocity(desired_velocity: Vector3) -> void:
 
 func _process(delta: float) -> void:
 	if not in_cupola:
-		var acceleration = Vector3(0, 0, 0)
+		var acceleration = Vector3.ZERO
 		
 		if Input.is_action_pressed("ui_up"):
 			acceleration += Vector3(0, 0, -1)
@@ -34,7 +34,7 @@ func _process(delta: float) -> void:
 			velocity += global_transform.basis * acceleration.normalized()/10
 		else:
 			velocity += global_transform.basis * acceleration.normalized()/5
-			
+		
 		velocity = velocity.clamp(Vector3(-max_velocity, -max_velocity, -max_velocity), Vector3(max_velocity, max_velocity, max_velocity))
 		global_translate(velocity*delta)
 
@@ -49,17 +49,22 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("cancel_movement"):
-		var tween = create_tween()
-		tween.set_trans(Tween.TRANS_EXPO)
-		tween.set_ease(Tween.EASE_OUT)
+		var stop_tween = create_tween()
+		stop_tween.set_trans(Tween.TRANS_LINEAR)
 		
-		tween.tween_method(set_velocity, velocity, Vector3.ZERO, 3)
+		stop_tween.tween_method(set_velocity, velocity, Vector3.ZERO, 2)
 	elif event.is_action_pressed("interact"):
 		in_cupola = not in_cupola
 		var cupola = get_parent().get_node("cupola")
+		var station = get_parent().get_node("station")
 		
 		if in_cupola:
 			cupola.show()
+			$Helmet.hide()
+			station.hide()
 			position = cupola.position
 		else:
+			velocity = Vector3.ZERO
+			$Helmet.show()
 			cupola.hide()
+			station.show()

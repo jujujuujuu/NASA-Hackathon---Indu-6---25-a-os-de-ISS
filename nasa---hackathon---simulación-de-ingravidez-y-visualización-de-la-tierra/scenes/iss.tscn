@@ -1,9 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://dpn64rrxkr6pg"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_dnbv2"]
+[gd_scene format=3 uid="uid://dpn64rrxkr6pg"]
 
 [node name="ISS" type="Node3D"]
 metadata/_edit_group_ = true
-
-[node name="Mesh" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_dnbv2")

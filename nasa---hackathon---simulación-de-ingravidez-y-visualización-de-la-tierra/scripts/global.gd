@@ -15,7 +15,6 @@ func _ready():
 			continue
 			
 		var processed_data = []
-		processed_data.append(data[0])
 		processed_data.append(Vector3(
 			float(data[1])*mango,
 			float(data[2])*mango,

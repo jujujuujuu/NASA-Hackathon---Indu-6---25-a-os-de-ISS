@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c36velgas3n3k" path="res://addons/zylann.atmosphere/planet_atmosphere.tscn" id="2"]
 [ext_resource type="Script" uid="uid://o4qenkkfxr4d" path="res://addons/zylann.atmosphere/demo/mouse_look.gd" id="3"]
 [ext_resource type="Shader" uid="uid://b8np7p6fperas" path="res://addons/zylann.atmosphere/shaders/planet_atmosphere_clouds.gdshader" id="3_ra2pw"]
-[ext_resource type="Texture2D" path="res://tests/2k_earth_clouds.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://d3aasnj3abjqa" path="res://textures/clouds.jpg" id="4"]
 [ext_resource type="Script" uid="uid://qobj8wunp2h1" path="res://addons/zylann.atmosphere/noise_cubemap.gd" id="4_8lw7l"]
 [ext_resource type="Script" uid="uid://b8a4qo8tvjshx" path="res://addons/zylann.atmosphere/demo/avatar.gd" id="5_mkng0"]
 

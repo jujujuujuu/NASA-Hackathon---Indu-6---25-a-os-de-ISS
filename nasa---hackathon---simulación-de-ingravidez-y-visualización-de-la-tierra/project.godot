@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="NASA - Hackathon - Simulación de ingravidez y visualización de la tierra"
-run/main_scene="uid://b5ictro75vtl0"
+run/main_scene="uid://naxq48c7wura"
 config/features=PackedStringArray("4.5", "Mobile")
 boot_splash/bg_color=Color(0.96, 0.96, 0.96, 1)
 boot_splash/fullsize=false
@@ -22,9 +22,16 @@ config/icon="res://icon.svg"
 
 Global="*res://scripts/global.gd"
 
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/window_width_override=1152
+window/size/window_height_override=648
+
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/zylann.atmosphere/tools/plugin.cfg")
+enabled=PackedStringArray("res://addons/lensflares/plugin.cfg", "res://addons/zylann.atmosphere/tools/plugin.cfg")
 
 [input]
 

@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded;//, depth_draw_alpha_prepass;
+render_mode unshaded, depth_test_disabled;
 
 #define ATMOSPHERE_RAYMARCH_STEPS 8
 #include "include/planet_atmosphere_main.gdshaderinc"

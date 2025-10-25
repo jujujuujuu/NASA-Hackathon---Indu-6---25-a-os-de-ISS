@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://naxq48c7wura"]
+
+[ext_resource type="Script" uid="uid://p8sj382s22w1" path="res://scripts/scene_manager.gd" id="1_o5qli"]
+[ext_resource type="AudioStream" uid="uid://cjeetk5q7eb3g" path="res://sounds/music/Akira - The Blithering Heights.ogg" id="17_muem4"]
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_o5qli")
+
+[node name="TransitionRect" type="ColorRect" parent="."]
+z_index = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("17_muem4")

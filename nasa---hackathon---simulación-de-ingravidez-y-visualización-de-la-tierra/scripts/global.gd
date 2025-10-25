@@ -2,7 +2,9 @@ extends Node
 
 var orbit_data = []
 var earth_radius = 6371
-var mango = 0.0785
+var mango = 0.00785
+
+signal switch_scene
 
 func _ready():
 	var text = FileAccess.open("res://scripts//orbit_data.txt", FileAccess.READ).get_as_text()

@@ -1,0 +1,164 @@
+[gd_scene load_steps=24 format=3 uid="uid://chymj6rqeitg1"]
+
+[ext_resource type="Texture2D" uid="uid://do7x2luy042gc" path="res://textures/skybox.jpg" id="1_tn317"]
+[ext_resource type="Shader" uid="uid://ujvuv72q1ac8" path="res://scripts/earth.gdshader" id="2_m8nf6"]
+[ext_resource type="Script" uid="uid://bh1jb0da4h4mj" path="res://scripts/earth_menu.gd" id="2_pgjjs"]
+[ext_resource type="Texture2D" uid="uid://cqsjejrg7ye1o" path="res://textures/earth_color.jpg" id="3_pgjjs"]
+[ext_resource type="Texture2D" uid="uid://dpkiid3gnnxk8" path="res://textures/earth_lights.jpg" id="4_1nvso"]
+[ext_resource type="Texture2D" uid="uid://b7ixn6xjgl07x" path="res://textures/earth_normal.jpg" id="5_gsp51"]
+[ext_resource type="Texture2D" uid="uid://60txytnjls5t" path="res://textures/8081_earthspec10k.jpg" id="6_r8uic"]
+[ext_resource type="SphereMesh" uid="uid://ch0eyu4mpvaqh" path="res://scenes/clouds.tres" id="7_x1pfr"]
+[ext_resource type="Texture2D" uid="uid://d3aasnj3abjqa" path="res://textures/clouds.jpg" id="8_n0tym"]
+[ext_resource type="PackedScene" uid="uid://c36velgas3n3k" path="res://addons/zylann.atmosphere/planet_atmosphere.tscn" id="9_8jfef"]
+[ext_resource type="FontFile" uid="uid://dgthl0y46tmtb" path="res://Nasa.ttf" id="12_1nvso"]
+[ext_resource type="Script" uid="uid://dfy82p4h188an" path="res://scripts/ui_menu.gd" id="12_gsp51"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_qfvu4"]
+panorama = ExtResource("1_tn317")
+energy_multiplier = 0.2
+
+[sub_resource type="Sky" id="Sky_7r4gi"]
+sky_material = SubResource("PanoramaSkyMaterial_qfvu4")
+process_mode = 1
+
+[sub_resource type="Environment" id="Environment_twuju"]
+background_mode = 2
+background_energy_multiplier = 0.5
+sky = SubResource("Sky_7r4gi")
+reflected_light_source = 2
+glow_enabled = true
+glow_levels/3 = 0.0
+glow_levels/4 = 1.0
+glow_levels/6 = 1.0
+glow_intensity = 4.0
+glow_strength = 0.8
+glow_blend_mode = 0
+glow_hdr_scale = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aox1m"]
+render_priority = 0
+shader = ExtResource("2_m8nf6")
+shader_parameter/day_tex = ExtResource("3_pgjjs")
+shader_parameter/night_tex = ExtResource("4_1nvso")
+shader_parameter/normal_tex = ExtResource("5_gsp51")
+shader_parameter/roughness_tex = ExtResource("6_r8uic")
+shader_parameter/sun_dir = Vector3(0, 0, -1)
+shader_parameter/emission_strength = 1.0000000475
+shader_parameter/night_falloff = 0.10000000475
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jbj1t"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hp05y"]
+transparency = 1
+blend_mode = 1
+albedo_texture = ExtResource("8_n0tym")
+normal_scale = 0.2
+normal_texture = SubResource("CompressedTexture2D_jbj1t")
+disable_receive_shadows = true
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1nvso"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gsp51"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r8uic"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x1pfr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n0tym"]
+
+[node name="Start" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_twuju")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, -1)
+layers = 3
+shadow_enabled = true
+
+[node name="Earth" type="Node3D" parent="."]
+transform = Transform3D(0.9170601, -0.39874908, 0, 0.39874908, 0.9170601, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("2_pgjjs")
+
+[node name="Mesh" type="MeshInstance3D" parent="Earth"]
+material_overlay = SubResource("ShaderMaterial_aox1m")
+mesh = ExtResource("7_x1pfr")
+skeleton = NodePath("../..")
+
+[node name="Clouds" type="MeshInstance3D" parent="Earth"]
+transform = Transform3D(1.01, 0, 0, 0, 1.01, 0, 0, 0, 1.01, 0, 0, 0)
+mesh = ExtResource("7_x1pfr")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_hp05y")
+
+[node name="PlanetAthmosphere" parent="Earth" instance=ExtResource("9_8jfef")]
+transform = Transform3D(0.9170601, -0.39874908, 0, 0.39874908, 0.9170601, 0, 0, 0, 0.991, 0, 0, 0)
+planet_radius = 50.5
+atmosphere_height = 1.0
+sun_path = NodePath("../../Sun")
+shader_params/u_density = 0.5
+shader_params/u_scattering_strength = 3.0
+shader_params/u_atmosphere_ambient_color = Color(0, 0, 0, 1)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.19546676, 0, -0.9807102, 0, 1, 0, 0.9807101, 0, -0.19546673, -168.69646, 2.0001755, -71.25629)
+fov = 35.0
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("12_gsp51")
+
+[node name="Title" type="RichTextLabel" parent="UI"]
+layout_mode = 0
+offset_left = 65.0
+offset_top = 62.0
+offset_right = 348.0
+offset_bottom = 275.0
+theme_override_fonts/normal_font = ExtResource("12_1nvso")
+theme_override_font_sizes/normal_font_size = 100
+bbcode_enabled = true
+text = "I.S.S.
+[font_size=38]VISUALIZER[/font_size]"
+
+[node name="EnterButton" type="Button" parent="UI"]
+layout_mode = 0
+offset_left = 65.0
+offset_top = 470.0
+offset_right = 327.0
+offset_bottom = 520.0
+theme_type_variation = &"FlatButton"
+theme_override_colors/font_color = Color(1, 1, 1, 0.7019608)
+theme_override_fonts/font = ExtResource("12_1nvso")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1nvso")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_gsp51")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_r8uic")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_x1pfr")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_n0tym")
+text = "Enter Cupola"
+alignment = 0
+
+[node name="QuitButton" type="Button" parent="UI"]
+layout_mode = 0
+offset_left = 65.0
+offset_top = 520.0
+offset_right = 357.0
+offset_bottom = 570.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.7019608)
+theme_override_fonts/font = ExtResource("12_1nvso")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1nvso")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_gsp51")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_r8uic")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_x1pfr")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_n0tym")
+text = "Quit to desktop"
+alignment = 0
+
+[connection signal="pressed" from="UI/EnterButton" to="UI" method="_on_enter_button_pressed"]
+[connection signal="pressed" from="UI/QuitButton" to="UI" method="_on_quit_button_pressed"]
